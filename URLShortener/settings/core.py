@@ -1,22 +1,15 @@
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 SECRET_KEY = "django-insecure-!l(5+d!9d79x4q4pp2f=(*70kn@pyf6m$*+ei!58sa1#t1_iz4"
 
 DEBUG = True
 
+
+WSGI_APPLICATION = "URLShortener.wsgi.application"
+
+ROOT_URLCONF = "URLShortener.urls"
+
+
 ALLOWED_HOSTS = []
 
-INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -28,7 +21,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "URLShortener.urls"
 
 TEMPLATES = [
     {
@@ -46,14 +38,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "URLShortener.wsgi.application"
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -69,15 +53,3 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_TZ = True
-
-STATIC_URL = "static/"
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

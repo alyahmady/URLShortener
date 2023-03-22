@@ -1,0 +1,14 @@
+from .apps import INSTALLED_APPS
+from .core import (
+    ALLOWED_HOSTS,
+    WSGI_APPLICATION,
+    MIDDLEWARE,
+    SECRET_KEY,
+    ROOT_URLCONF,
+    DEBUG,
+    TEMPLATES,
+    AUTH_PASSWORD_VALIDATORS,
+)
+from .db import DATABASES, DEFAULT_AUTO_FIELD
+from .misc import LANGUAGE_CODE, USE_TZ, USE_I18N, TIME_ZONE
+from .path import BASE_DIR, STATIC_URL
