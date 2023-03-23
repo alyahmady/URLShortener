@@ -1,5 +1,5 @@
 from .apps import INSTALLED_APPS
-from .core import (
+from .base import (
     ALLOWED_HOSTS,
     WSGI_APPLICATION,
     MIDDLEWARE,
@@ -8,7 +8,16 @@ from .core import (
     DEBUG,
     TEMPLATES,
     AUTH_PASSWORD_VALIDATORS,
+    CSRF_TRUSTED_ORIGINS,
 )
-from .db import DATABASES, DEFAULT_AUTO_FIELD
+from .db import DATABASES, DEFAULT_AUTO_FIELD, AUTH_USER_MODEL
 from .misc import LANGUAGE_CODE, USE_TZ, USE_I18N, TIME_ZONE
-from .path import BASE_DIR, STATIC_URL
+from .path import (
+    BASE_DIR,
+    STATIC_URL,
+    STATIC_ROOT,
+    STATICFILES_DIRS,
+    STATICFILES_FINDERS,
+    MEDIA_URL,
+    MEDIA_ROOT,
+)

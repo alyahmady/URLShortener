@@ -1,16 +1,36 @@
-SECRET_KEY = "django-insecure-!l(5+d!9d79x4q4pp2f=(*70kn@pyf6m$*+ei!58sa1#t1_iz4"
+import environ
 
-DEBUG = True
+from .handler import env
+from .path import BASE_DIR
 
+# Important
+DEBUG = env.bool("DEBUG", None)
 
+if DEBUG is None:
+    django_env_file_path = BASE_DIR / "deploy" / "envs" / "django.env"
+    try:
+        environ.Env.read_env(django_env_file_path)
+    except:
+        raise ImportError(
+            f"Cannot read local `{str(django_env_file_path.resolve())}` file "
+            f"to parse environment variables in local runtime"
+        )
+
+    DEBUG = env.bool("DEBUG", False)
+
+SECRET_KEY = env.str("SECRET_KEY")
+
+# Django main routes
 WSGI_APPLICATION = "URLShortener.wsgi.application"
 
 ROOT_URLCONF = "URLShortener.urls"
 
+# Security checks
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-ALLOWED_HOSTS = []
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
-
+# Others
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
