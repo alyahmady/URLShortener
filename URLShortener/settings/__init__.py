@@ -9,6 +9,6 @@ from .core import (
     TEMPLATES,
     AUTH_PASSWORD_VALIDATORS,
 )
-from .db import DATABASES, DEFAULT_AUTO_FIELD
+from .db import DATABASES, DEFAULT_AUTO_FIELD, AUTH_USER_MODEL
 from .misc import LANGUAGE_CODE, USE_TZ, USE_I18N, TIME_ZONE
 from .path import BASE_DIR, STATIC_URL
