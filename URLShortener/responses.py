@@ -29,6 +29,7 @@ class CustomResponse(Response):
             {
                 "status": self.status_code,
                 "message": message,
+                "code": code,
                 "result": data,
             }
         )

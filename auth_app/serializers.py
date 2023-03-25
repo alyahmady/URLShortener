@@ -12,7 +12,7 @@ class CustomTokenObtainSerializer(serializers.Serializer):
     token_class = RefreshToken
 
     default_error_messages = {
-        "no_active_account": _("No active account found with the given credentials")
+        "no_active_account": "No active account found with the given credentials"
     }
 
     def __init__(self, *args, **kwargs):
