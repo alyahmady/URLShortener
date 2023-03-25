@@ -2,7 +2,6 @@ deploy/envs/django.env
 deploy/envs/mongodb.env
 deploy/envs/redis.env
 
-
 *.log
 *.pot
 *.pyc

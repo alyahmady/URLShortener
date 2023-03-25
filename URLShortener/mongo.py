@@ -23,6 +23,7 @@ class MongoDB:
                 connectTimeoutMS=settings.MONGODB_CONNECTION_TIMEOUT_SECONDS * 1000,
                 minPoolSize=settings.MONGODB_MIN_CONNECTION_POOL_SIZE,
                 maxPoolSize=settings.MONGODB_MAX_CONNECTION_POOL_SIZE,
+
             )
         except PyMongoError as exc:
             raise ConnectionException(ErrorCode.DATABASE_DOWN) from exc
