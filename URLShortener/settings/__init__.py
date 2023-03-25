@@ -10,6 +10,7 @@ from .base import (
     TEMPLATES,
     CSRF_TRUSTED_ORIGINS,
 )
+from .cors import CORS_ALLOWED_ORIGINS, CORS_ALLOW_ALL_ORIGINS
 from .logging import LOGS_DIR, CORE_LOG_FILE, ERROR_LOG_FILE, DEBUG_LOG_FILE
 from .misc import LANGUAGE_CODE, USE_TZ, USE_I18N, TIME_ZONE
 from .mongo import (
