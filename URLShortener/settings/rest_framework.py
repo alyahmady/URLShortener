@@ -1,6 +1,9 @@
 from .handler import env
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'auth_app.services.CustomJWTAuthentication',
+    ),
     "EXCEPTION_HANDLER": "apps.core.exceptions.custom_exception_handler",
 }
 
