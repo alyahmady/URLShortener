@@ -38,8 +38,6 @@ class MongoDB:
             client = cls._get_client()
 
         try:
-            db: Database = client[db_name]
-            db.create_collection()
             return client[db_name]
         except Exception as exc:
             raise ConnectionException(ErrorCode.DATABASE_DOWN) from exc
@@ -73,7 +71,7 @@ class MongoDB:
             collection_indexes: dict = collection.index_information()
             index_fields = [
                 index_pair
-                for _, index_info in collection_indexes
+                for _, index_info in collection_indexes.items()
                 for index_pair in index_info["key"]
             ]
 
