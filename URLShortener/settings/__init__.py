@@ -1,4 +1,5 @@
 from .apps import INSTALLED_APPS
+from .auth import AUTH_PASSWORD_VALIDATORS, AUTHENTICATION_BACKENDS
 from .base import (
     ALLOWED_HOSTS,
     WSGI_APPLICATION,
@@ -7,9 +8,9 @@ from .base import (
     ROOT_URLCONF,
     DEBUG,
     TEMPLATES,
-    AUTH_PASSWORD_VALIDATORS,
     CSRF_TRUSTED_ORIGINS,
 )
+from .cors import CORS_ALLOWED_ORIGINS, CORS_ALLOW_ALL_ORIGINS
 from .logging import LOGS_DIR, CORE_LOG_FILE, ERROR_LOG_FILE, DEBUG_LOG_FILE
 from .misc import LANGUAGE_CODE, USE_TZ, USE_I18N, TIME_ZONE
 from .mongo import (
@@ -35,3 +36,5 @@ from .path import (
     MEDIA_URL,
     MEDIA_ROOT,
 )
+from .rest_framework import API_PREFIX, API_VERSION, REST_FRAMEWORK
+from .swagger import SPECTACULAR_SETTINGS

@@ -21,7 +21,7 @@ def setup_logger(name: str, log_file: Path | str, level: int = logging.DEBUG):
 
 
 core_logger = setup_logger(
-    name="BistiCore", log_file=settings.CORE_LOG_FILE, level=logging.DEBUG
+    name="URLShortenerCore", log_file=settings.CORE_LOG_FILE, level=logging.DEBUG
 )
 core_logger.info("Starting core logger")
 
