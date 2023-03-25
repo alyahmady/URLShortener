@@ -56,9 +56,13 @@ def custom_exception_handler(exc: Exception, context: dict):
 
 class BaseCustomException(Exception):
     def __init__(self, code: ErrorCode):
+        self.auth_header = ""
+        self.wait = ""
+
         self.message = code.value["message"]
         self.code = code.value["code"]
         self.status = code.value["status"]
+        self.data = code.value.get("data")
 
 
 class CustomInternalException(BaseCustomException):
@@ -81,4 +85,12 @@ class ConnectionException(CustomInternalException):
 
 
 class InvalidParameterException(CustomInternalException):
+    ...
+
+
+class InternalAuthException(CustomInternalException):
+    ...
+
+
+class AuthException(BaseCustomException):
     ...
