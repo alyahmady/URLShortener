@@ -1,8 +1,11 @@
 import traceback
 import uuid
+from enum import Enum
 
 from django.conf import settings
+from pymongo.errors import PyMongoError
 from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response as DRFResponse
 from rest_framework.views import exception_handler
 
@@ -12,6 +15,23 @@ from URLShortener.responses import ErrorResponse
 
 
 def custom_exception_handler(exc: Exception, context: dict):
+    try:
+        if isinstance(exc, PyMongoError):
+            raise ConnectionException(ErrorCode.DATABASE_DOWN) from exc
+    except BaseCustomException as e:
+        exc = e
+    except:
+        pass
+
+    try:
+        if isinstance(exc, AuthenticationFailed):
+            if isinstance(exc.detail.code, ErrorCode):
+                raise AuthException(exc.detail.code)
+    except BaseCustomException as e:
+        exc = e
+    except:
+        pass
+
     if isinstance(exc, BaseCustomException):
         headers = {}
         if exc.auth_header:
@@ -46,7 +66,7 @@ def custom_exception_handler(exc: Exception, context: dict):
             headers=response.headers,
         )
 
-    debug_logger.exception(f"ID: {error_id} - Data: {response.data}")
+    debug_logger.exception(f"ID: {error_id} - Data: {getattr(response, 'data', None)}")
     return ErrorResponse(
         message="Unknown error",
         data={"error_id": error_id},
@@ -55,14 +75,17 @@ def custom_exception_handler(exc: Exception, context: dict):
 
 
 class BaseCustomException(Exception):
-    def __init__(self, code: ErrorCode):
+    def __init__(self, code: ErrorCode | dict):
         self.auth_header = ""
         self.wait = ""
 
-        self.message = code.value["message"]
-        self.code = code.value["code"]
-        self.status = code.value["status"]
-        self.data = code.value.get("data")
+        if isinstance(code, Enum):
+            code = code.value
+
+        self.message = code["message"]
+        self.code = code["code"]
+        self.status = code["status"]
+        self.data = code.get("data")
 
 
 class CustomInternalException(BaseCustomException):

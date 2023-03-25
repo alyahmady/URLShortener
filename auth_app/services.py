@@ -1,10 +1,9 @@
 from bson import ObjectId
 from bson.errors import BSONError
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
 
 from URLShortener.error_codes import ErrorCode
-from URLShortener.exceptions import AuthException
 from auth_app.token import CustomToken
 from users_app.models import UserCollection
 
@@ -27,7 +26,7 @@ class CustomJWTAuthentication(JWTAuthentication):
         try:
             return CustomToken(raw_token)
         except TokenError as exc:
-            raise AuthException(ErrorCode.INVALID_TOKEN) from exc
+            raise AuthenticationFailed(code=ErrorCode.INVALID_TOKEN) from exc
 
     def get_user(self, validated_token):
         """
@@ -38,13 +37,13 @@ class CustomJWTAuthentication(JWTAuthentication):
             if not isinstance(user_id, ObjectId):
                 user_id = ObjectId(user_id)
         except (LookupError, BSONError, TypeError) as exc:
-            raise AuthException(ErrorCode.INVALID_TOKEN) from exc
+            raise AuthenticationFailed(code=ErrorCode.INVALID_TOKEN) from exc
 
         user = UserCollection.find_one(filter={"_id": user_id})
         if not user:
-            raise AuthException(ErrorCode.USER_NOT_FOUND)
+            raise AuthenticationFailed(code=ErrorCode.USER_NOT_FOUND)
 
         if not user.is_active:
-            raise AuthException(ErrorCode.INACTIVE_USER)
+            raise AuthenticationFailed(code=ErrorCode.INACTIVE_USER)
 
         return user
