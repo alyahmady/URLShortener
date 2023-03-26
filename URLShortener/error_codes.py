@@ -67,3 +67,8 @@ class ErrorCode(enum.Enum):
         "code": 2007,
         "status": status.HTTP_409_CONFLICT,
     }
+    INVALID_PASSWORD = {
+        "message": "Invalid Password.",
+        "code": 2008,
+        "status": status.HTTP_400_BAD_REQUEST,
+    }
