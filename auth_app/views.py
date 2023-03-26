@@ -1,7 +1,10 @@
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from URLShortener.responses import SuccessResponse
-from auth_app.serializers import CustomTokenObtainSerializer, CustomTokenRefreshSerializer
+from auth_app.serializers import (
+    CustomTokenObtainSerializer,
+    CustomTokenRefreshSerializer,
+)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

@@ -4,6 +4,7 @@ from rest_framework import status
 
 
 class ErrorCode(enum.Enum):
+    # Internal
     DATABASE_DOWN = {
         "message": "Database is temporary down.",
         "code": 1001,
@@ -19,7 +20,13 @@ class ErrorCode(enum.Enum):
         "code": 1003,
         "status": status.HTTP_401_UNAUTHORIZED,
     }
+    INVALID_USER_ID = {
+        "message": "User ID is not valid.",
+        "code": 1004,
+        "status": status.HTTP_400_BAD_REQUEST,
+    }
 
+    # Response
     NO_PASSWORD_FOR_USER = {
         "message": "User has no password.",
         "code": 2001,
@@ -44,4 +51,14 @@ class ErrorCode(enum.Enum):
         "message": "Token is invalid. Authentication failed.",
         "code": 2005,
         "status": status.HTTP_401_UNAUTHORIZED,
+    }
+    PASSWORD_NOT_MATCH = {
+        "message": "Password fields didn't match.",
+        "code": 2006,
+        "status": status.HTTP_400_BAD_REQUEST,
+    }
+    DUPLICATE_USER = {
+        "message": "User email is already taken.",
+        "code": 2007,
+        "status": status.HTTP_409_CONFLICT,
     }

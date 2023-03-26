@@ -1,5 +1,5 @@
 from .apps import INSTALLED_APPS
-from .auth import AUTH_PASSWORD_VALIDATORS, AUTHENTICATION_BACKENDS
+from .auth import AUTH_PASSWORD_VALIDATORS
 from .base import (
     ALLOWED_HOSTS,
     WSGI_APPLICATION,
@@ -11,6 +11,7 @@ from .base import (
     CSRF_TRUSTED_ORIGINS,
 )
 from .cors import CORS_ALLOWED_ORIGINS, CORS_ALLOW_ALL_ORIGINS
+from .jwt import SIMPLE_JWT
 from .logging import LOGS_DIR, CORE_LOG_FILE, ERROR_LOG_FILE, DEBUG_LOG_FILE
 from .misc import LANGUAGE_CODE, USE_TZ, USE_I18N, TIME_ZONE
 from .mongo import (

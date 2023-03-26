@@ -17,6 +17,15 @@ class CustomJWTAuthentication(JWTAuthentication):
     www_authenticate_realm = "api"
     media_type = "application/json"
 
+    def is_user_active(self, user: dict, raise_exc: bool = True):
+        is_active = user.get("is_active")
+        if not is_active:
+            if raise_exc:
+                raise AuthenticationFailed(code=ErrorCode.INACTIVE_USER)
+            return False
+
+        return True
+
     def get_validated_token(self, raw_token):
         """
         Validates an encoded JSON web token and returns a validated token
@@ -43,7 +52,5 @@ class CustomJWTAuthentication(JWTAuthentication):
         if not user:
             raise AuthenticationFailed(code=ErrorCode.USER_NOT_FOUND)
 
-        if not user.is_active:
-            raise AuthenticationFailed(code=ErrorCode.INACTIVE_USER)
-
-        return user
+        if self.is_user_active(user, raise_exc=True):
+            return user
