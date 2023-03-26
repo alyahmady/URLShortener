@@ -1,0 +1,86 @@
+version: "3.9"
+
+services:
+  url_shortener_backend_service:
+    restart: always
+    container_name: url_shortener_back_local
+    hostname: url_shortener_back_local
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.local
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./deploy/envs/django.env
+    volumes:
+      - ./logs:/code/logs
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: curl --fail http://localhost:8000/health-check || exit 1
+      interval: 25s
+      retries: 10
+      start_period: 2s
+      timeout: 10s
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    container_name: url_shortener_nginx_local
+    hostname: url_shortener_nginx_local
+    env_file:
+      - ./deploy/envs/nginx.env
+    depends_on:
+      - url_shortener_backend_service
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./deploy/config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./deploy/config/nginx/conf.d:/etc/nginx/conf.d
+      - ./deploy/config/nginx/templates:/etc/nginx/templates
+      - ./logs/nginx:/var/log/nginx
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    container_name: url_shortener_redis_local
+    hostname: url_shortener_redis_local
+    env_file:
+      - ./deploy/envs/redis.env
+    ports:
+      - "6379:6379"
+    volumes:
+      - url-shortener-local-redis-data:/bitnami/redis/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 25s
+      retries: 10
+      start_period: 2s
+      timeout: 10s
+
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    container_name: url_shortener_mongo_local
+    hostname: url_shortener_mongo_local
+    env_file:
+      - ./deploy/envs/mongodb.env
+    ports:
+      - "27017:27017"
+    volumes:
+      - url-shortener-local-mongo-db-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      interval: 25s
+      retries: 10
+      start_period: 2s
+      timeout: 10s
+
+
+
+volumes:
+  url-shortener-local-mongo-db-data:
+  url-shortener-local-redis-data:
