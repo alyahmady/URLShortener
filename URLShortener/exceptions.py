@@ -127,3 +127,7 @@ class InvalidDataException(CustomResponseException):
 
 class DuplicateEntityException(CustomResponseException):
     ...
+
+
+class NotFoundEntityException(CustomResponseException):
+    ...
