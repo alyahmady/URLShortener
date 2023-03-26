@@ -12,6 +12,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainSerializer
     permission_classes = [AllowAny]
     authentication_classes = []
+    throttle_scope = "token_obtain"
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -26,6 +27,7 @@ class CustomTokenRefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
     permission_classes = [AllowAny]
     authentication_classes = []
+    throttle_scope = "token_refresh"
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
