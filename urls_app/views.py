@@ -1,12 +1,17 @@
+from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
+from URLShortener.error_codes import ErrorCode
+from URLShortener.exceptions import NotFoundEntityException
 from URLShortener.permissions import IsAuthenticated
 from URLShortener.responses import SuccessResponse, ErrorResponse
 from URLShortener.serializers import ResponseSerializer
 from auth_app.services import CustomJWTAuthentication
+from urls_app.models import URLCollection
 from urls_app.serializers import CreateShortURLSerializer
 
 
@@ -52,3 +57,42 @@ class CreateShortURLView(APIView):
             data=serializer.errors,
             status_code=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class RedirectShortURLView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    throttle_scope = "short_url_redirect"
+
+    @extend_schema(
+        description="Redirecting a short URL (with slug) to the `original_url`",
+        methods=["GET"],
+        request=CreateShortURLSerializer,
+        responses={
+            status.HTTP_301_MOVED_PERMANENTLY: OpenApiResponse(
+                description="Successfully redirected"
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                response=ResponseSerializer, description="Bad payload"
+            ),
+            status.HTTP_404_NOT_FOUND: OpenApiResponse(
+                response=ResponseSerializer, description="URL Slug not found"
+            ),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(
+                response=ResponseSerializer,
+            ),
+            status.HTTP_503_SERVICE_UNAVAILABLE: OpenApiResponse(
+                response=ResponseSerializer, description="Database is temporarily down"
+            ),
+        },
+    )
+    def get(self, request: Request, **kwargs):
+        url_slug = self.kwargs["url_slug"]
+
+        url_object = URLCollection.find_one(
+            filter={"slug": url_slug}, projection={"original_url": True}
+        )
+        if not url_object:
+            raise NotFoundEntityException(ErrorCode.SHORT_URL_NOT_FOUND)
+
+        return HttpResponseRedirect(redirect_to=url_object["original_url"], status=status.HTTP_301_MOVED_PERMANENTLY)
