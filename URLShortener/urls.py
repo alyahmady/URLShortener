@@ -22,6 +22,7 @@ urlpatterns = [
     ),
     # API Routes
     path(f"{settings.API_PREFIX}/auth/", include("auth_app.urls")),
+    path(f"{settings.API_PREFIX}/user/", include("users_app.urls")),
 ]
 
 urlpatterns += [
