@@ -1,3 +1,9 @@
 from .handler import env
 
 URL_LIFESPAN_HOURS = env.int("URL_LIFESPAN_HOURS", 12)
+
+URL_CACHE_KEY = "url_{slug}"
+URL_CACHE_VALUE = "{hit};{original_url}"
+
+URL_CACHE_MAX_TTL_SECONDS = env.int("URL_CACHE_MAX_TTL_SECONDS", 86400)
+URL_CACHE_MIN_TTL_SECONDS = env.int("URL_CACHE_MIN_TTL_SECONDS", 600)

@@ -54,4 +54,4 @@ from .path import (
 )
 from .rest_framework import API_PREFIX, API_VERSION, REST_FRAMEWORK
 from .swagger import SPECTACULAR_SETTINGS
-from .url import URL_LIFESPAN_HOURS
+from .url import URL_LIFESPAN_HOURS, URL_CACHE_KEY, URL_CACHE_VALUE, URL_CACHE_MAX_TTL_SECONDS
