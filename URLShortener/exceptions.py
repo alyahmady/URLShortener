@@ -34,14 +34,15 @@ def custom_exception_handler(exc: Exception, context: dict):
 
     if isinstance(exc, BaseCustomException):
         headers = {}
-        if exc.auth_header:
-            headers["WWW-Authenticate"] = exc.auth_header
-        if exc.wait and exc.wait.isdigit():
-            headers["Retry-After"] = str(exc.wait)
+        if getattr(exc, "auth_header", None):
+            headers["WWW-Authenticate"] = getattr(exc, "auth_header", None)
+        if getattr(exc, "wait", "").isdigit():
+            headers["Retry-After"] = getattr(exc, "wait", None)
 
         return ErrorResponse(
             message=exc.message,
             data=exc.data,
+            code=exc.code,
             status_code=exc.status,
             headers=headers,
         )
@@ -76,9 +77,6 @@ def custom_exception_handler(exc: Exception, context: dict):
 
 class BaseCustomException(Exception):
     def __init__(self, code: ErrorCode | dict):
-        self.auth_header = ""
-        self.wait = ""
-
         if isinstance(code, Enum):
             code = code.value
 

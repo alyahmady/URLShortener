@@ -5,7 +5,15 @@ from rest_framework.response import Response
 
 
 class CustomResponse(Response):
-    def __init__(self, message=None, data=None, code=2000, status_code=status.HTTP_200_OK, *args, **kwargs):
+    def __init__(
+        self,
+        message=None,
+        data=None,
+        code=2000,
+        status_code=status.HTTP_200_OK,
+        *args,
+        **kwargs
+    ):
 
         # Filtering kwargs
         extra_kwargs = kwargs
@@ -45,7 +53,9 @@ class SuccessResponse(CustomResponse):
     def __init__(
         self, message=None, data=None, status_code=status.HTTP_200_OK, *args, **kwargs
     ):
-        super().__init__(message, data, status_code, *args, **kwargs)
+        super().__init__(
+            message=message, data=data, status_code=status_code, *args, **kwargs
+        )
 
 
 class ErrorResponse(CustomResponse):
@@ -54,7 +64,15 @@ class ErrorResponse(CustomResponse):
         message=None,
         data=None,
         status_code=status.HTTP_400_BAD_REQUEST,
+        code=2000,
         *args,
         **kwargs
     ):
-        super().__init__(message, data, status_code, *args, **kwargs)
+        super().__init__(
+            message=message,
+            data=data,
+            status_code=status_code,
+            code=code,
+            *args,
+            **kwargs
+        )
