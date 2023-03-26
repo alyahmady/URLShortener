@@ -20,9 +20,14 @@ class ErrorCode(enum.Enum):
         "code": 1003,
         "status": status.HTTP_401_UNAUTHORIZED,
     }
+    URL_UNIQUE_SLUG_GENERATION = {
+        "message": "Failed to generate unique slug for URL.",
+        "code": 1004,
+        "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+    }
     INVALID_USER_ID = {
         "message": "User ID is not valid.",
-        "code": 1004,
+        "code": 1005,
         "status": status.HTTP_400_BAD_REQUEST,
     }
 

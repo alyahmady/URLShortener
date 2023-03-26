@@ -22,10 +22,10 @@ class UserRegisterView(APIView):
                 response=ResponseSerializer, description="Bad payload"
             ),
             status.HTTP_409_CONFLICT: OpenApiResponse(
-                response=ResponseSerializer, description="Database is down"
+                response=ResponseSerializer, description="Email taken (duplicate user)"
             ),
             status.HTTP_503_SERVICE_UNAVAILABLE: OpenApiResponse(
-                response=ResponseSerializer, description="Email taken (duplicate user)"
+                response=ResponseSerializer, description="Database is down"
             ),
         },
     )
