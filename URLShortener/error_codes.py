@@ -72,3 +72,8 @@ class ErrorCode(enum.Enum):
         "code": 2008,
         "status": status.HTTP_400_BAD_REQUEST,
     }
+    SHORT_URL_NOT_FOUND = {
+        "message": "Short URL not found.",
+        "code": 2009,
+        "status": status.HTTP_404_NOT_FOUND,
+    }
