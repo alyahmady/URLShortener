@@ -1,0 +1,37 @@
+FROM python:3.10-slim AS compile-image
+LABEL maintainer="better.aly.ahmady@gmail.com"
+
+COPY requirements.txt .
+RUN pip install --quiet --user wheel
+RUN pip install --quiet --user -r requirements.txt
+
+
+FROM python:3.10-slim AS build-image
+
+COPY --from=compile-image /root/.local /root/.local
+
+ENV PATH=/root/.local/bin:$PATH
+
+# Set environment variables.
+ENV PYTHONWRITEBYTECODE 1
+ENV PYTHONBUFFERED 1
+
+RUN mkdir -p /code/logs
+
+# For security and image performance directories are hard-coded
+COPY auth_app /code/auth_app
+COPY URLShortener /code/URLShortener
+COPY static /code/static
+COPY urls_app /code/urls_app
+COPY users_app /code/users_app
+COPY manage.py /code/manage.py
+
+WORKDIR /code
+
+COPY deploy/config/gunicorn.conf.py /code/gunicorn.conf.py
+
+COPY deploy/entrypoints/entrypoint.sh /code/entrypoint.sh
+RUN sed -i 's/\r$//g' /code/entrypoint.sh
+RUN chmod +x /code/entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/code/entrypoint.sh"]
