@@ -10,5 +10,6 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     # OTHER SETTINGS
     "COMPONENT_SPLIT_REQUEST": True,
-    "SCHEMA_PATH_PREFIX": fr"/{API_PREFIX}/",
+    "SCHEMA_PATH_PREFIX": rf"/{API_PREFIX}/",
+    "PREPROCESSING_HOOKS": ["URLShortener.schema.preprocessing_filter_spec"],
 }

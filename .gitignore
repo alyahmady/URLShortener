@@ -1,6 +1,9 @@
 deploy/envs/django.env
 deploy/envs/mongodb.env
 deploy/envs/redis.env
+deploy/envs/nginx.env
+
+deploy/config/nginx/conf.d/app.conf
 
 *.log
 *.pot

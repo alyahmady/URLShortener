@@ -7,6 +7,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from URLShortener.views import Healthcheck
+
 urlpatterns = [
     re_path(
         route=r"^media/(?P<path>.*)$",
@@ -41,5 +43,6 @@ urlpatterns += [
     path(f"{settings.API_PREFIX}/auth/", include("auth_app.urls")),
     path(f"{settings.API_PREFIX}/user/", include("users_app.urls")),
     path(f"{settings.API_PREFIX}/url/", include("urls_app.urls")),
+    path(f"health-check", Healthcheck.as_view(), name="health-check"),
     path(f"", include("urls_app.short_urls")),
 ]

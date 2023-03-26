@@ -7,8 +7,7 @@ class IsAuthenticated(BasePermission):
     """
 
     def has_permission(self, request, view):
+        user = getattr(request, "user", dict())
         return bool(
-            request.user
-            and request.user.get("is_active") is True
-            and request.user.get("_id") is not None
+            user and user.get("is_active") is True and user.get("_id") is not None
         )
