@@ -8,6 +8,23 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
+    re_path(
+        route=r"^media/(?P<path>.*)$",
+        view=serve,
+        kwargs={
+            "document_root": settings.MEDIA_ROOT,
+        },
+    ),
+    re_path(
+        route=r"^static/(?P<path>.*)$",
+        view=serve,
+        kwargs={
+            "document_root": settings.STATIC_ROOT,
+        },
+    ),
+]
+
+urlpatterns += [
     # Swagger
     path(f"{settings.API_PREFIX}/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
@@ -24,21 +41,5 @@ urlpatterns = [
     path(f"{settings.API_PREFIX}/auth/", include("auth_app.urls")),
     path(f"{settings.API_PREFIX}/user/", include("users_app.urls")),
     path(f"{settings.API_PREFIX}/url/", include("urls_app.urls")),
-]
-
-urlpatterns += [
-    re_path(
-        route=r"^media/(?P<path>.*)$",
-        view=serve,
-        kwargs={
-            "document_root": settings.MEDIA_ROOT,
-        },
-    ),
-    re_path(
-        route=r"^static/(?P<path>.*)$",
-        view=serve,
-        kwargs={
-            "document_root": settings.STATIC_ROOT,
-        },
-    ),
+    path(f"", include("urls_app.short_urls")),
 ]
