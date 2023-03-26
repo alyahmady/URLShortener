@@ -3,6 +3,8 @@ from collections import OrderedDict
 from rest_framework import status
 from rest_framework.response import Response
 
+from URLShortener.serializers import ResponseSerializer
+
 
 class CustomResponse(Response):
     def __init__(
@@ -33,14 +35,16 @@ class CustomResponse(Response):
         self.message = message
         self.status_code = status_code
 
-        self.data = OrderedDict(
-            {
+        response_serializer = ResponseSerializer(
+            data={
                 "status": self.status_code,
                 "message": message,
                 "code": code,
                 "result": data,
             }
         )
+        response_serializer.is_valid(raise_exception=True)
+        self.data = OrderedDict(response_serializer.validated_data)
 
     def __str__(self):
         return self.message
