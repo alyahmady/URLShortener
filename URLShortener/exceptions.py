@@ -113,5 +113,13 @@ class InternalAuthException(CustomInternalException):
     ...
 
 
-class AuthException(BaseCustomException):
+class AuthException(CustomResponseException):
+    ...
+
+
+class InvalidDataException(CustomResponseException):
+    ...
+
+
+class DuplicateEntityException(CustomResponseException):
     ...
