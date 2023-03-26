@@ -10,9 +10,13 @@ class CustomAnonRateThrottle(AnonRateThrottle):
 
     def get_cache_key(self, request, view):
         user = getattr(request, "user", dict())
-        is_authenticated = bool(
-            user and user.get("is_active") is True and user.get("_id") is not None
-        )
+
+        is_authenticated = False
+        if isinstance(user, dict):
+            is_authenticated = bool(
+                user and user.get("is_active") is True and user.get("_id") is not None
+            )
+
         if is_authenticated:
             return None
 
@@ -27,9 +31,13 @@ class CustomUserRateThrottle(UserRateThrottle):
 
     def get_cache_key(self, request, view):
         user = getattr(request, "user", dict())
-        is_authenticated = bool(
-            user and user.get("is_active") is True and user.get("_id") is not None
-        )
+
+        is_authenticated = False
+        if isinstance(user, dict):
+            is_authenticated = bool(
+                user and user.get("is_active") is True and user.get("_id") is not None
+            )
+
         if is_authenticated:
             ident = str(user["_id"])
         else:
@@ -43,9 +51,13 @@ class CustomScopedRateThrottle(ScopedRateThrottle):
 
     def get_cache_key(self, request, view):
         user = getattr(request, "user", dict())
-        is_authenticated = bool(
-            user and user.get("is_active") is True and user.get("_id") is not None
-        )
+
+        is_authenticated = False
+        if isinstance(user, dict):
+            is_authenticated = bool(
+                user and user.get("is_active") is True and user.get("_id") is not None
+            )
+
         if is_authenticated:
             ident = str(user["_id"])
         else:
