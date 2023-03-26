@@ -18,6 +18,7 @@ from urls_app.serializers import CreateShortURLSerializer
 class CreateShortURLView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
+    throttle_scope = "create_short_url"
 
     @extend_schema(
         description="Creating a short URL which will be redirected to the `original_url`",

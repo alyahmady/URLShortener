@@ -13,6 +13,7 @@ from users_app.serializers import (
 class UserRegisterView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
+    throttle_scope = "user_register"
 
     @extend_schema(
         description="Registering a new user",
