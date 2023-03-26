@@ -1,5 +1,3 @@
-AUTHENTICATION_BACKENDS = ["auth_app.backends.CustomAuthBackend"]
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
