@@ -9,6 +9,15 @@ from .base import (
     TEMPLATES,
     CSRF_TRUSTED_ORIGINS,
 )
+from .cache import (
+    CACHES,
+    REDIS_PASSWORD,
+    REDIS_USER,
+    REDIS_HOST,
+    REDIS_PORT,
+    REDIS_CONNECTION_URI,
+    CACHE_VERSION,
+)
 from .cors import CORS_ALLOWED_ORIGINS, CORS_ALLOW_ALL_ORIGINS
 from .jwt import SIMPLE_JWT
 from .logging import LOGS_DIR, CORE_LOG_FILE, ERROR_LOG_FILE, DEBUG_LOG_FILE
