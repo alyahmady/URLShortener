@@ -1,3 +1,12 @@
+TODO:
+
+- Asynchronous task to remove expired URLs from MongoDB
+- Don't create a duplicate record for Long URL, if it's already in MongoDB records (need index on `origianl_url` field)
+- Return full Shortened URL in `CreateShortURL` response
+- ...
+
+---
+
 System Design reference: [Link](https://dev.to/karanpratapsingh/system-design-url-shortener-10i5)
 
 Hints
@@ -9,16 +18,16 @@ Another (better) way to implement a scalable system (time-consuming for this tes
 
 ---
 
-To initialize project:
+To initialize project on local:
 
 1- Need to create a database and its owner user in MongoDB:
 ```shell
 $ mongosh
 
 > use DB_NAME
-> db.createUser({user: "urlshortener", pwd: "urlshortener", roles: [{role: "readWrite", db: "urlshortener"}]})
+> db.createUser({user: "USER_NAME", pwd: "USER_PASS", roles: [{role: "readWrite", db: "DB_NAME"}]})
 
-# Insert a collection and a document to commit database changes
+# Insert a sample (e.g. test) collection and a document to commit database changes
 > db.test.insert({test: "test"})
 ```
 * You should replace your desired values with `USER_NAME` and `USER_PASS` and `DB_NAME`.
