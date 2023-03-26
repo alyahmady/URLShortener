@@ -31,10 +31,12 @@ class CustomTokenObtainSerializer(serializers.Serializer):
 
         refresh = self.get_token(self.user)
 
-        data["refresh"] = str(refresh)
-        data["access"] = str(refresh.access_token)
+        validated_data = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
 
-        return data
+        return validated_data
 
     @classmethod
     def get_token(cls, user: dict):
