@@ -1,5 +1,4 @@
 """
-! IMPORTANT
 
 This script is not a part of project structure
 
