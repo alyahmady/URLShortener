@@ -3,6 +3,7 @@ import datetime
 from bson import ObjectId
 from bson.errors import BSONError
 from django.conf import settings
+from django.core.cache import cache
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -41,10 +42,20 @@ class CreateShortURLSerializer(serializers.Serializer):
             "user_id": user_id,
         }
 
-        url_id = generate_url_slug(max_retry=5)
+        url_id, url_slug = generate_url_slug(max_retry=5)
         URLCollection.update_one(
             filter={"_id": url_id}, update={"$set": url_validated_data}, upsert=False
         )
 
         url_object: dict = URLCollection.find_one({"_id": url_id})
-        return jsonable_encoder(url_object)
+        url_object = jsonable_encoder(url_object)
+
+        cache.set(
+            key=settings.URL_CACHE_KEY.format(slug=url_slug),
+            value=settings.URL_CACHE_VALUE.format(
+                hit=0, original_url=url_validated_data["original_url"]
+            ),
+            timeout=settings.URL_CACHE_MIN_TTL_SECONDS,
+        )
+
+        return url_object

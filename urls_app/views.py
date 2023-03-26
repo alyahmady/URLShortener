@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
@@ -90,10 +92,44 @@ class RedirectShortURLView(APIView):
     def get(self, request: Request, **kwargs):
         url_slug = self.kwargs["url_slug"]
 
-        url_object = URLCollection.find_one(
-            filter={"slug": url_slug}, projection={"original_url": True}
+        cached_original_url = cache.get(
+            key=settings.URL_CACHE_KEY.format(slug=url_slug),
         )
-        if not url_object:
-            raise NotFoundEntityException(ErrorCode.SHORT_URL_NOT_FOUND)
 
-        return HttpResponseRedirect(redirect_to=url_object["original_url"], status=status.HTTP_301_MOVED_PERMANENTLY)
+        if cached_original_url:
+            # Get cached value
+            hit, *original_url = cached_original_url.split(";")
+            original_url = "".join(original_url)
+
+            # Increase hit count and time-to-live of Redis key (20-80 Rule)
+            hit = int(hit) + 1
+
+            ttl = settings.URL_CACHE_MIN_TTL_SECONDS * hit
+            ttl = min(ttl, settings.URL_CACHE_MAX_TTL_SECONDS)
+
+            cache.set(
+                key=settings.URL_CACHE_KEY.format(slug=url_slug),
+                value=settings.URL_CACHE_VALUE.format(
+                    hit=hit, original_url=original_url
+                ),
+                timeout=ttl,
+            )
+
+        else:
+            url_object = URLCollection.find_one(
+                filter={"slug": url_slug}, projection={"original_url": True}
+            )
+            if not url_object:
+                raise NotFoundEntityException(ErrorCode.SHORT_URL_NOT_FOUND)
+
+            original_url = url_object["original_url"]
+
+            cache.set(
+                key=settings.URL_CACHE_KEY.format(slug=url_slug),
+                value=settings.URL_CACHE_VALUE.format(hit=0, original_url=original_url),
+                timeout=settings.URL_CACHE_MIN_TTL_SECONDS,
+            )
+
+        return HttpResponseRedirect(
+            redirect_to=original_url, status=status.HTTP_301_MOVED_PERMANENTLY
+        )

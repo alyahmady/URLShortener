@@ -1,4 +1,5 @@
 import secrets
+from typing import Tuple
 
 from bson import ObjectId
 from pymongo.errors import DuplicateKeyError
@@ -9,7 +10,7 @@ from URLShortener.exceptions import CustomInternalException
 from urls_app.models import URLCollection
 
 
-def generate_url_slug(max_retry: int = 5) -> ObjectId:
+def generate_url_slug(max_retry: int = 5) -> Tuple[ObjectId, str]:
     retry_count = 0
     while True:
         if retry_count >= max_retry:
@@ -30,4 +31,4 @@ def generate_url_slug(max_retry: int = 5) -> ObjectId:
             if not isinstance(url_id, ObjectId):
                 url_id = ObjectId(url_id)
 
-            return url_id
+            return url_id, url_slug
