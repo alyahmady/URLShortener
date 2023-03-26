@@ -34,10 +34,10 @@ class CreateShortURLView(APIView):
     def post(self, request: Request, **kwargs):
         serializer = CreateShortURLSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user_id=request.user)
+            url_object = serializer.save(user_id=request.user["_id"])
             return SuccessResponse(
                 message="Short URL created successfully.",
-                data=serializer.data,
+                data=url_object,
                 status_code=status.HTTP_201_CREATED,
             )
 

@@ -42,7 +42,9 @@ class UserRegisterSerializer(serializers.Serializer):
         }
 
         try:
-            user_db_object: InsertOneResult = UserCollection.insert_one(user_validated_data)
+            user_db_object: InsertOneResult = UserCollection.insert_one(
+                user_validated_data
+            )
         except DuplicateKeyError:
             raise DuplicateEntityException(ErrorCode.DUPLICATE_USER)
 
@@ -50,5 +52,15 @@ class UserRegisterSerializer(serializers.Serializer):
         if not isinstance(user_id, ObjectId):
             user_id = ObjectId(user_id)
 
-        user: dict = UserCollection.find_one({"_id": user_id})
-        return user
+        user: dict = UserCollection.find_one(
+            filter={"_id": user_id},
+            projection={
+                "_id": True,
+                "first_name": True,
+                "last_name": True,
+                "email": True,
+                "created_at": True,
+                "is_active": True,
+            },
+        )
+        return jsonable_encoder(user)

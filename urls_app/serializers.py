@@ -8,6 +8,7 @@ from rest_framework import serializers
 
 from URLShortener.error_codes import ErrorCode
 from URLShortener.exceptions import InvalidParameterException
+from URLShortener.utils import jsonable_encoder
 from urls_app.models import URLCollection
 from urls_app.services import generate_url_slug
 
@@ -46,4 +47,4 @@ class CreateShortURLSerializer(serializers.Serializer):
         )
 
         url_object: dict = URLCollection.find_one({"_id": url_id})
-        return url_object
+        return jsonable_encoder(url_object)
