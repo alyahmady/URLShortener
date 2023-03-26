@@ -36,6 +36,9 @@ class CreateShortURLView(APIView):
             status.HTTP_409_CONFLICT: OpenApiResponse(
                 response=ResponseSerializer, description="Database is down"
             ),
+            status.HTTP_429_TOO_MANY_REQUESTS: OpenApiResponse(
+                response=ResponseSerializer, description="Access denied. Too many requests"
+            ),
             status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(
                 response=ResponseSerializer,
                 description="Failed in unique URL slug generation",
@@ -80,6 +83,9 @@ class RedirectShortURLView(APIView):
             ),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(
                 response=ResponseSerializer, description="URL Slug not found"
+            ),
+            status.HTTP_429_TOO_MANY_REQUESTS: OpenApiResponse(
+                response=ResponseSerializer, description="Access denied. Too many requests"
             ),
             status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(
                 response=ResponseSerializer,

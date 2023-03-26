@@ -29,6 +29,9 @@ class UserRegisterView(APIView):
             status.HTTP_409_CONFLICT: OpenApiResponse(
                 response=ResponseSerializer, description="Email taken (duplicate user)"
             ),
+            status.HTTP_429_TOO_MANY_REQUESTS: OpenApiResponse(
+                response=ResponseSerializer, description="Access denied. Too many requests"
+            ),
             status.HTTP_503_SERVICE_UNAVAILABLE: OpenApiResponse(
                 response=ResponseSerializer, description="Database is down"
             ),
