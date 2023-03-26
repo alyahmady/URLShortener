@@ -21,10 +21,10 @@ services:
       - 8000
     healthcheck:
       test: curl --fail http://localhost:8000/health-check || exit 1
-      interval: 25s
+      interval: 10s
       retries: 10
       start_period: 2s
-      timeout: 10s
+      timeout: 5s
 
   nginx:
     image: nginx:stable-alpine
@@ -56,10 +56,10 @@ services:
       - url-shortener-prod-redis-data:/bitnami/redis/data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-      interval: 25s
+      interval: 10s
       retries: 10
       start_period: 2s
-      timeout: 10s
+      timeout: 5s
 
   mongodb:
     image: mongo:latest
@@ -74,10 +74,10 @@ services:
       - url-shortener-prod-mongo-db-data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
-      interval: 25s
+      interval: 10s
       retries: 10
       start_period: 2s
-      timeout: 10s
+      timeout: 5s
 
 
 
