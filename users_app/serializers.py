@@ -8,6 +8,7 @@ from rest_framework_simplejwt.serializers import PasswordField
 
 from URLShortener.error_codes import ErrorCode
 from URLShortener.exceptions import InvalidDataException, DuplicateEntityException
+from URLShortener.utils import jsonable_encoder, validate_password_string
 from users_app.models import UserCollection
 
 
@@ -24,7 +25,9 @@ class UserRegisterSerializer(serializers.Serializer):
         if data["password"] != data["confirm_password"]:
             raise InvalidDataException(ErrorCode.PASSWORD_NOT_MATCH)
 
-        data.pop("confirm_password")
+        raw_password = data.pop("confirm_password")
+        validate_password_string(password=raw_password, raise_exc=True)
+
         return super().validate(data)
 
     def save(self):
