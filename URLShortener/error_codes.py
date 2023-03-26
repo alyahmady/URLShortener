@@ -20,9 +20,14 @@ class ErrorCode(enum.Enum):
         "code": 1003,
         "status": status.HTTP_401_UNAUTHORIZED,
     }
+    URL_UNIQUE_SLUG_GENERATION = {
+        "message": "Failed to generate unique slug for URL.",
+        "code": 1004,
+        "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+    }
     INVALID_USER_ID = {
         "message": "User ID is not valid.",
-        "code": 1004,
+        "code": 1005,
         "status": status.HTTP_400_BAD_REQUEST,
     }
 
@@ -61,4 +66,9 @@ class ErrorCode(enum.Enum):
         "message": "User email is already taken.",
         "code": 2007,
         "status": status.HTTP_409_CONFLICT,
+    }
+    INVALID_PASSWORD = {
+        "message": "Invalid Password.",
+        "code": 2008,
+        "status": status.HTTP_400_BAD_REQUEST,
     }

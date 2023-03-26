@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from URLShortener.responses import SuccessResponse, ErrorResponse
@@ -10,6 +11,9 @@ from users_app.serializers import (
 
 
 class UserRegisterView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
     @extend_schema(
         description="Registering a new user",
         methods=["POST"],
@@ -22,20 +26,20 @@ class UserRegisterView(APIView):
                 response=ResponseSerializer, description="Bad payload"
             ),
             status.HTTP_409_CONFLICT: OpenApiResponse(
-                response=ResponseSerializer, description="Database is down"
+                response=ResponseSerializer, description="Email taken (duplicate user)"
             ),
             status.HTTP_503_SERVICE_UNAVAILABLE: OpenApiResponse(
-                response=ResponseSerializer, description="Email taken (duplicate user)"
+                response=ResponseSerializer, description="Database is down"
             ),
         },
     )
     def post(self, request, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user_object = serializer.save()
             return SuccessResponse(
                 message="User registered successfully.",
-                data=serializer.data,
+                data=user_object,
                 status_code=status.HTTP_201_CREATED,
             )
 

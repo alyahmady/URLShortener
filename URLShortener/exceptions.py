@@ -98,7 +98,11 @@ class CustomInternalException(BaseCustomException):
 
 
 class CustomResponseException(BaseCustomException):
-    ...
+    def __init__(self, code: ErrorCode, extra_message: str | None = None):
+        super().__init__(code)
+
+        if extra_message:
+            self.message += f" {extra_message}"
 
 
 class ConnectionException(CustomInternalException):

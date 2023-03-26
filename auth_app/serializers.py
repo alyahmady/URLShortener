@@ -9,8 +9,6 @@ from auth_app.token import CustomToken
 
 
 class CustomTokenObtainSerializer(serializers.Serializer):
-    token_class = RefreshToken
-
     default_error_messages = {
         "no_active_account": "No active account found with the given credentials"
     }
@@ -46,10 +44,9 @@ class CustomTokenObtainSerializer(serializers.Serializer):
 class CustomTokenRefreshSerializer(serializers.Serializer):
     refresh = serializers.CharField()
     access = serializers.CharField(read_only=True)
-    token_class = CustomToken
 
     def validate(self, data):
-        refresh = self.token_class(data["refresh"])
+        refresh = CustomToken(data["refresh"])
 
         validated_data = {"access": str(refresh.access_token)}
 

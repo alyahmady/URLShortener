@@ -1,5 +1,4 @@
 from .apps import INSTALLED_APPS
-from .auth import AUTH_PASSWORD_VALIDATORS
 from .base import (
     ALLOWED_HOSTS,
     WSGI_APPLICATION,
@@ -28,6 +27,13 @@ from .mongo import (
     MONGODB_MAX_CONNECTION_POOL_SIZE,
     MONGODB_MIN_CONNECTION_POOL_SIZE,
 )
+from .password import (
+    AUTH_PASSWORD_VALIDATORS,
+    USER_PASSWORD_MIN_LEN,
+    USER_PASSWORD_NUMERIC_REQUIRED,
+    USER_PASSWORD_UPPER_AND_LOWER_REQUIRED,
+    USER_PASSWORD_SPECIAL_CHAR_REQUIRED,
+)
 from .path import (
     BASE_DIR,
     STATIC_URL,
@@ -39,3 +45,4 @@ from .path import (
 )
 from .rest_framework import API_PREFIX, API_VERSION, REST_FRAMEWORK
 from .swagger import SPECTACULAR_SETTINGS
+from .url import URL_LIFESPAN_HOURS
