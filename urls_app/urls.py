@@ -1,8 +1,7 @@
 from django.urls import path
-
 from urls_app.views import CreateShortURLView
 
-app_name = "users_app"
+app_name = "urls_app"
 
 
 urlpatterns = [
