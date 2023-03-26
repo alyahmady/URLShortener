@@ -2,9 +2,9 @@ from bson import ObjectId
 from bson.errors import BSONError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
+from rest_framework_simplejwt.tokens import AccessToken
 
 from URLShortener.error_codes import ErrorCode
-from auth_app.token import CustomToken
 from users_app.models import UserCollection
 
 
@@ -33,7 +33,7 @@ class CustomJWTAuthentication(JWTAuthentication):
         """
 
         try:
-            return CustomToken(raw_token)
+            return AccessToken(raw_token)
         except TokenError as exc:
             raise AuthenticationFailed(code=ErrorCode.INVALID_TOKEN) from exc
 

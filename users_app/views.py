@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from URLShortener.responses import SuccessResponse, ErrorResponse
@@ -10,6 +11,9 @@ from users_app.serializers import (
 
 
 class UserRegisterView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
     @extend_schema(
         description="Registering a new user",
         methods=["POST"],

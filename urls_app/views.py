@@ -3,12 +3,17 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
+from URLShortener.permissions import IsAuthenticated
 from URLShortener.responses import SuccessResponse, ErrorResponse
 from URLShortener.serializers import ResponseSerializer
+from auth_app.services import CustomJWTAuthentication
 from urls_app.serializers import CreateShortURLSerializer
 
 
 class CreateShortURLView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
+
     @extend_schema(
         description="Creating a short URL which will be redirected to the `original_url`",
         methods=["POST"],
@@ -24,7 +29,8 @@ class CreateShortURLView(APIView):
                 response=ResponseSerializer, description="Database is down"
             ),
             status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(
-                response=ResponseSerializer, description="Failed in unique URL slug generation"
+                response=ResponseSerializer,
+                description="Failed in unique URL slug generation",
             ),
             status.HTTP_503_SERVICE_UNAVAILABLE: OpenApiResponse(
                 response=ResponseSerializer, description="Email taken (duplicate user)"
